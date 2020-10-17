@@ -174,6 +174,27 @@ def update_grade(id, name, gr):  # 根据学号，实验名称修改学生成绩
     conn.commit()
     conn.close()
 
+def login(user, passwd):
+    conn = pymysql.connect(host='182.92.122.205', user='root', passwd='486942')
+    conn.select_db('zy')
+    cur = conn.cursor()
+    login_suc = False
+    sql = '''
+    select *
+    from users
+    where use_id=%s
+    '''
+    cur.execute(sql,user)
+    ser = cur.fetchall()
+    if(ser[0][1]==passwd):
+        login_suc = True
+        return login_suc, ser[0][2]
+    else:
+        return login_suc
+    cur.close()
+    conn.commit()
+    conn.close()
+
 
 if __name__ == '__main__':
     # search_id('15054037')
@@ -183,5 +204,6 @@ if __name__ == '__main__':
     # insert_exp('345', '演示2', '234567', '演示性', '1', '0', '234567', 'None')
     # delete_exp(id='345')
     # search_room('三楼311')
-    # search_stu('实验2-1', '王亚', '计0501')
-    # update_grade('030501001', '实验2-1', '100')
+    # search_stu('实验2-1','王亚','计0501')
+    # update_grade('030501001','实验2-1','100')
+    # print(login('rty','111'))
