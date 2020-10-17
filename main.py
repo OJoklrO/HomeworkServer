@@ -42,7 +42,6 @@ class PostHandler(BaseHTTPRequestHandler):
                 out.write('login succeed')
             else:
                 out.write('login fail')
-
         # out.write('Client: {}\n'.format(self.client_address))
         # out.write('User-agent: {}\n'.format(
         #     self.headers['user-agent']))
