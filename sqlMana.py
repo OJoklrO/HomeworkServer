@@ -186,6 +186,23 @@ def login(user, passwd):
     conn.commit()
     conn.close()
 
+def search_table(table_name):
+    conn = pymysql.connect(host='182.92.122.205', user='root', passwd='486942')
+    conn.select_db('zy')
+    cur = conn.cursor()
+    # sql = '''
+    # select *
+    # from %s
+    # '''
+    sql = "select * from " + table_name +';'
+
+    cur.execute(sql)
+    ser = cur.fetchall()
+    print(ser)
+    return ser
+    cur.close()
+    conn.commit()
+    conn.close()
 
 if __name__ == '__main__':
     # search_id('15054037')
@@ -198,3 +215,4 @@ if __name__ == '__main__':
     # search_stu('实验2-1','王亚','计0501')
     # update_grade('030501001','实验2-1','100')
     # print(login('rty','111'))
+    search_table('course')
