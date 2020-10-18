@@ -40,19 +40,12 @@ class PostHandler(BaseHTTPRequestHandler):
         data = None
 
         if "user" in form.keys():
-            user = form["user"].value
-            passwd = form["passwd"].value
-            print(user)
-            print(passwd)
-            if str(form["user"].value) == "joklr" and str(form["passwd"].value) == "123":
-                data = "login succeed"
-            else:
-                data = "fail"
+            auth = sqlMana.login(str(form["user"].value), str(form["passwd"].value))
+            data = str(auth)
         elif "sqltype" in form.keys():
             sqltype = str(form["sqltype"].value)
             if sqltype == "1":
                 data = json.dumps(sqlMana.search_id(str(form["id"].value)))
-                out.write(data)
             elif sqltype == "2":
                 data = json.dumps(sqlMana.search_name(str(form["db"].value)))
             elif sqltype == "3":
@@ -113,38 +106,8 @@ class PostHandler(BaseHTTPRequestHandler):
                     str(form["gr"].value)
                 )
 
+        print(data)
         out.write(data)
-        # if "sql" in form.keys():
-        #     data = json.dumps(sqlMana.Search(form["sql"].value))
-        #     out.write(data)
-        # elif "user" in form.keys():
-        #     user = form["user"].value
-        #     passwd = form["passwd"].value
-        #     print(user)
-        #     print(passwd)
-        #     if str(user) == "joklr" and str(passwd) == "123":
-        #         out.write('login succeed')
-        #     else:
-        #         out.write('login fail')
-        # out.write('Client: {}\n'.format(self.client_address))
-        # out.write('User-agent: {}\n'.format(
-        #     self.headers['user-agent']))
-        # out.write('Path: {}\n'.format(self.path))
-        # out.write('Form data:\n')
-
-        # for field in form.keys():
-        #     field_item = form[field]
-        #     if field_item.filename:
-        #         file_data = field_item.file.read()
-        #         file_len = len(file_data)
-        #         del file_data
-        #         out.write(
-        #             '\tUploaded {} as {!r} ({} bytes)\n'.format(
-        #                 field, field_item.filename, file_len)
-        #         )
-        #     else:
-        #         out.write('\t{}={}\n'.format(
-        #             field, form[field].value))
 
         # 将编码 wrapper 到底层缓冲的连接断开，
         # 使得将 wrapper 删除时，

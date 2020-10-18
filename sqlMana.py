@@ -13,11 +13,14 @@ def search_id(id):  # 根据课程编号查询课程信息
     '''
     cur.execute(sql, id)
     ser = cur.fetchall()
+
+    desc = cur.description
+    data_dict = [dict(zip([col[0] for col in desc], row)) for row in ser]
+
     cur.close()
     conn.commit()
     conn.close()
-    print(ser)
-    return ser
+    return data_dict
 
 
 # 2
@@ -32,11 +35,14 @@ def search_name(db):  # 根据课程名称查询课程信息
     '''
     cur.execute(sql, db)
     ser = cur.fetchall()
+
+    desc = cur.description
+    data_dict = [dict(zip([col[0] for col in desc], row)) for row in ser]
+
     cur.close()
     conn.commit()
     conn.close()
-    print(ser)
-    return ser
+    return data_dict
 
 
 # 3
@@ -46,7 +52,9 @@ def insert_course(id, name, hour, dept, term, sum):  # 课程信息添加
     cur = conn.cursor()
     sql = '''
     insert into course
-    value
+    value    select capacity,exp_id,exp_name,time,batch,exp_tc,num
+    from address natural join experiment natural join exp_time natural join teacher
+    where address.room=%s;
     (%s,%s,%s,%s,%s,%s);
     '''
     cur.execute(sql, (id, name, hour, dept, term, sum))
@@ -109,7 +117,7 @@ def delete_exp(id=None, name=None):  # 实验列表的删除
         delete from experiment where exp_id=%s
         '''
         cur.execute(sql, id)
-    elif name != None:
+    elif name is not None:
         sql = '''
         delete from experiment where exp_name=%s
         '''
@@ -131,11 +139,14 @@ def search_room(room):  # 根据实验室查找实验室课程相关信息
     '''
     cur.execute(sql, room)
     ser = cur.fetchall()
+
+    desc = cur.description
+    data_dict = [dict(zip([col[0] for col in desc], row)) for row in ser]
+
     cur.close()
     conn.commit()
     conn.close()
-    print(ser)
-    return ser
+    return data_dict
 
 
 # 8
@@ -150,11 +161,14 @@ def search_stu(na, teac, cla):  # 根据实验，实验员，班级查找学生�
     '''
     cur.execute(sql, (na, teac, cla))
     ser = cur.fetchall()
+
+    desc = cur.description
+    data_dict = [dict(zip([col[0] for col in desc], row)) for row in ser]
+
     cur.close()
     conn.commit()
     conn.close()
-    print(ser)
-    return ser
+    return data_dict
 
 
 # 9
@@ -174,36 +188,37 @@ def update_grade(id, name, gr):  # 根据学号，实验名称修改学生成绩
     conn.commit()
     conn.close()
 
+
 def login(user, passwd):
     conn = pymysql.connect(host='182.92.122.205', user='root', passwd='486942')
     conn.select_db('zy')
     cur = conn.cursor()
-    login_suc = False
     sql = '''
     select *
     from users
     where use_id=%s
     '''
-    cur.execute(sql,user)
+    cur.execute(sql, user)
     ser = cur.fetchall()
-    if(ser[0][1]==passwd):
+    if len(ser) != 0 and (ser[0][1] == passwd):
         login_suc = True
-        return login_suc, ser[0][2]
+        return ser[0][2]
     else:
-        return login_suc
+        return 0
     cur.close()
     conn.commit()
     conn.close()
 
 
 if __name__ == '__main__':
-    # search_id('15054037')
+    # search_id('15054039')
     # search_name('课程1')
     # insert_course('777', 'name', '10', 'dept', 'term', '10')
-    delete_course(id='777')
+    # delete_course(id='777')
     # insert_exp('345', '演示2', '234567', '演示性', '1', '0', '234567', 'None')
     # delete_exp(id='345')
     # search_room('三楼311')
-    # search_stu('实验2-1','王亚','计0501')
+    data = search_stu('实验2-1','王亚','计0501')
+    print(data)
     # update_grade('030501001','实验2-1','100')
     # print(login('rty','111'))
