@@ -216,10 +216,6 @@ def search_table(table_name):
     conn = pymysql.connect(host='182.92.122.205', user='root', passwd='486942')
     conn.select_db('zy')
     cur = conn.cursor()
-    # sql = '''
-    # select *
-    # from %s
-    # '''
     sql = "select * from " + table_name + ';'
 
     cur.execute(sql)
@@ -235,6 +231,37 @@ def search_table(table_name):
     return data_dict
 
 
+def set_ZhC(id, passwd, qx):
+    conn = pymysql.connect(host='182.92.122.205', user='root', passwd='486942')
+    conn.select_db('zy')
+    cur = conn.cursor()
+
+    sql = '''
+    select use_id
+    from users
+    where use_id=%s
+    '''
+    cur.execute(sql, id)
+    ser = cur.fetchall()
+    if len(ser) == 0:
+        sql1 = '''
+        insert into users
+        value
+        (%s,%s,%s);
+        '''
+        cur.execute(sql1, (id, passwd, qx))
+        cur.close()
+        conn.commit()
+        conn.close()
+        return 1
+
+    else:
+        cur.close()
+        conn.commit()
+        conn.close()
+        return 0
+
+
 if __name__ == '__main__':
     # search_id('15054039')
     # search_name('课程1')
@@ -245,4 +272,5 @@ if __name__ == '__main__':
     # search_room('三楼311')
     # update_grade('030501001','实验2-1','100')
     # print(login('rty','111'))
-    print(search_table('course'))
+    # print(search_table('course'))
+    print(set_ZhC('aaa', '484651', '1'))
