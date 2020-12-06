@@ -215,10 +215,6 @@ def search_table(table_name):
     conn = pymysql.connect(host='182.92.122.205', user='root', passwd='486942')
     conn.select_db('zy')
     cur = conn.cursor()
-    # sql = '''
-    # select *
-    # from %s
-    # '''
     sql = "select * from " + table_name + ';'
 
     cur.execute(sql)
@@ -234,6 +230,7 @@ def search_table(table_name):
     return data_dict
 
 
+<<<<<<< HEAD
 def use_sql(sql):
     conn = pymysql.connect(host='182.92.122.205', user='root', passwd='486942')
     conn.select_db('zy')
@@ -252,6 +249,8 @@ def use_sql(sql):
     return data_dict
 
 
+=======
+>>>>>>> d650e7702bae032b3eddee52f92ebf049f891b84
 def set_ZhC(id, passwd, qx):
     conn = pymysql.connect(host='182.92.122.205', user='root', passwd='486942')
     conn.select_db('zy')
@@ -294,3 +293,7 @@ if __name__ == '__main__':
     # update_grade('030501001','实验2-1','100')
     # print(login('rty','111'))
     # print(search_table('course'))
+<<<<<<< HEAD
+=======
+    print(set_ZhC('aaa', '484651', '1'))
+>>>>>>> d650e7702bae032b3eddee52f92ebf049f891b84
