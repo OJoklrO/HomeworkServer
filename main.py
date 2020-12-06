@@ -45,9 +45,9 @@ class PostHandler(BaseHTTPRequestHandler):
         elif "sqltype" in form.keys():
             sqltype = str(form["sqltype"].value)
             if sqltype == "1":
-                data = json.dumps(sqlMana.search_id(str(form["id"].value)))
+                data = str(sqlMana.search_id(str(form["id"].value)))
             elif sqltype == "2":
-                data = json.dumps(sqlMana.search_name(str(form["db"].value)))
+                data = str(sqlMana.search_name(str(form["db"].value)))
             elif sqltype == "3":
                 sqlMana.insert_course(
                     str(form["id"].value),
@@ -92,9 +92,9 @@ class PostHandler(BaseHTTPRequestHandler):
                 elif "name" in form.keys():
                     sqlMana.delete_exp(str(form["name"].value))
             elif sqltype == "7":
-                data = json.dumps(sqlMana.search_room(str(form["room"].value)))
+                data = str(sqlMana.search_room(str(form["room"].value)))
             elif sqltype == "8":
-                data = json.dumps(sqlMana.search_stu(
+                data = str(sqlMana.search_stu(
                     str(form["na"].value),
                     str(form["teac"].value),
                     str(form["cla"].value)
@@ -105,6 +105,13 @@ class PostHandler(BaseHTTPRequestHandler):
                     str(form["name"].value),
                     str(form["gr"].value)
                 )
+        elif "gettable" in form.keys():
+            data = sqlMana.search_table(str(form["gettable"].value))
+        elif "sql" in form.keys():
+            sql = str(form["sql"].value).replace('-', ' ')
+            data = str(sqlMana.use_sql(sql))
+        elif "qx" in form.keys():
+            sqlMana.set_ZhC(str(form["id"].value), str(form["passwd"].value), str(form["qx"].value))
 
         print(data)
         out.write(data)
